@@ -104,10 +104,18 @@ void displayBruker::displayFM(int type)
     else
         exe = _scriptDirectory + "view.script";
 
-    QString fileName = _inputOptions.directoryName + "/pdata/1/visu_pars";
     QStringList arguments;
-    arguments.append(fileName);
+    arguments.append(_inputOptions.directoryName);
 
     auto *process = new QProcess();
+    connect(process, SIGNAL(finished(int, QProcess::ExitStatus)),this, SLOT(exitApp(int,QProcess::ExitStatus)));
+    FUNC_INFO << "exe" << exe << "arguments" << arguments;
     process->start(exe,arguments);
+}
+
+void displayBruker::exitApp(int exitCode, QProcess::ExitStatus exitStatus)
+{
+    FUNC_INFO << "exit code" << exitCode << "exit status" << exitStatus;
+    exit(exitCode);
+    FUNC_EXIT;
 }
